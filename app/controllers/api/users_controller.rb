@@ -1,6 +1,8 @@
 module Api
   # Controller that handles authorization and user data fetching
   class UsersController < ApplicationController
+    before_action :logged_in!, only: :name
+
     include Devise::Controllers::Helpers
 
     def login
@@ -26,5 +28,15 @@ module Api
         }
       }.to_json
     end
+
+    def name
+      user = user_by_id(params[:id])
+
+      render json: {
+        id: user.id,
+        name: user.name
+      } if user
+    end
+
   end
 end
