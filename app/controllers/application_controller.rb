@@ -12,6 +12,22 @@ class ApplicationController < ActionController::API
     }, status: :unauthorized
   end
 
+  def user_by_id(id)
+    user = User.find_by(id: id)
+
+    if user.blank?
+      render json: {
+        errors: [
+          "User with id #{id} not found"
+        ]
+      }, status: :not_found
+      return
+    end
+
+    return user
+  end
+
+
   def current_token
     request.env['warden-jwt_auth.token']
   end
